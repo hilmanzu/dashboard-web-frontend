@@ -10,7 +10,7 @@ export default function Sidebar() {
       <div className="h-16 flex items-center justify-center px-4 bg-[#283046] border-b border-gray-700">
         <Link href="/survey" className="flex items-center space-x-2">
           <Image 
-            src="/images/Logo.jpg" 
+            src="/images/logo.png" 
             alt="PGN Logo" 
             width={120} 
             height={40} 
