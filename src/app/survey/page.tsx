@@ -165,7 +165,7 @@ export default function SurveyPage() {
                           </p>
                           <button 
                             className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#00CFE8] hover:bg-[#00b8cf] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#00CFE8] transition-colors shadow-sm"
-                            onClick={() => alert('Survey detail not implemented in this demo')}
+                            onClick={() => router.push(`/survey/${survey.id}`)}
                           >
                             Isi Survey
                           </button>
