@@ -1,0 +1,75 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36" version="29.3.8">
+  <diagram name="MASTER - Mining Data Platform" id="0">
+    <mxGraphModel dx="1426" dy="727" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="mine" parent="1" style="swimlane;fillColor=#f8cecc;strokeWidth=2" value="MINE SITE – BERAU (OT Network)" vertex="1">
+          <mxGeometry height="360" width="420" x="20" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sensor" parent="mine" style="rounded=1;fillColor=#ffffff" value="Sensors / IoT" vertex="1">
+          <mxGeometry height="50" width="160" x="20" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="kafka" parent="mine" style="rounded=1;fillColor=#dae8fc" value="Kafka Cluster" vertex="1">
+          <mxGeometry height="50" width="180" x="200" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="spark" parent="mine" style="rounded=1;fillColor=#dae8fc;strokeWidth=2" value="Apache Spark (Single Writer)" vertex="1">
+          <mxGeometry height="70" width="180" x="200" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="hq" parent="1" style="swimlane;fillColor=#fff2cc;strokeWidth=2" value="HQ JAKARTA – IT + DMZ" vertex="1">
+          <mxGeometry height="360" width="420" x="480" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="fw" parent="hq" style="rounded=1;fillColor=#ffffff" value="Firewall + VPN" vertex="1">
+          <mxGeometry height="50" width="180" x="120" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="esb" parent="hq" style="rounded=1;fillColor=#ffe6cc;strokeWidth=2" value="Apache Camel ESB (DMZ)" vertex="1">
+          <mxGeometry height="70" width="220" x="100" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="sap" parent="hq" style="rounded=1;fillColor=#d5e8d4" value="SAP ECC / SAP HANA" vertex="1">
+          <mxGeometry height="50" width="140" x="230" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="sp" parent="hq" style="rounded=1;fillColor=#d5e8d4" value="SharePoint" vertex="1">
+          <mxGeometry height="50" width="140" x="40" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="cloud" parent="1" style="swimlane;fillColor=#e1d5e7;strokeWidth=2" value="CLOUD – Data Platform" vertex="1">
+          <mxGeometry height="360" width="420" x="940" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lake" parent="cloud" style="rounded=1;fillColor=#ffffff;strokeWidth=2" value="Lakehouse (Iceberg + MinIO)" vertex="1">
+          <mxGeometry height="70" width="260" x="20" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="bi" parent="cloud" style="rounded=1;fillColor=#ffffff" value="Tableau / BI" vertex="1">
+          <mxGeometry height="50" width="260" x="20" y="155" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="sensor" style="endArrow=block" target="kafka">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="kafka" style="endArrow=block" target="spark">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="spark" style="endArrow=block" target="fw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="fw" style="endArrow=block" target="esb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="spark" style="endArrow=block;entryX=0.533;entryY=1.035;entryDx=0;entryDy=0;entryPerimeter=0;" target="lake">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="310" y="350" />
+              <mxPoint x="1100" y="350" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="esb" style="endArrow=block" target="sap">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="esb" style="endArrow=block" target="sp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="esb" style="endArrow=block" target="bi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
