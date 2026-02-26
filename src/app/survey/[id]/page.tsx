@@ -127,6 +127,7 @@ export default function SurveyFormPage() {
           router.push('/');
         } else if (axiosError.response?.status === 404) {
           alert(axiosError.response.data?.message || 'Survey period is not active');
+          console.log(axiosError.response.data);
           router.push('/survey');
         } else {
           alert('Gagal memuat survey. Silakan coba lagi.');
