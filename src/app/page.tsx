@@ -30,10 +30,10 @@ export default function LoginPage() {
       const { access_token, user } = response.data;
       localStorage.setItem('token', access_token);
       localStorage.setItem('user', JSON.stringify(user));
-      
+
       // Redirect to survey or dashboard
       // The user mentioned "survey", checking api routes...
-      router.push('/survey'); 
+      router.push('/dashboard');
     } catch (err) {
       console.error(err);
       const axiosError = err as AxiosError<{ message: string }>;
