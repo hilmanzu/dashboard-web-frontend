@@ -692,7 +692,7 @@ export default function DashboardPage() {
         comparisonData?: ChartDataPoint[],
     ) {
         const categories = chartData.map((d) => String(d.x));
-        const series: ApexAxisChartSeries = [
+        const series: { name: string; data: number[] }[] = [
             { name: 'Data', data: chartData.map((d) => (typeof d.y === 'string' ? parseFloat(d.y) : d.y)) },
         ];
         const colors = [fillColor];
