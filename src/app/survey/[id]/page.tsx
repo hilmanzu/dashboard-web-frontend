@@ -108,12 +108,12 @@ export default function SurveyFormPage() {
         });
         setCustomerDetailValues(initialCustomerValues);
 
-        // Initialize question list values with default (1)
+        // Initialize question list values with no default selection
         const initialQuestionValues: Record<number, string> = {};
         response.data.survey.survey_question.forEach(question => {
           question.survey_question_detail.forEach(detail => {
             detail.survey_question_list.forEach(list => {
-              initialQuestionValues[list.id] = '1';
+              initialQuestionValues[list.id] = '';
             });
           });
         });
@@ -234,6 +234,7 @@ export default function SurveyFormPage() {
         }
       );
 
+      setSubmitting(false);
       alert('Survey berhasil dikirim!');
       router.push('/survey');
 
@@ -337,7 +338,7 @@ export default function SurveyFormPage() {
                             }
                             placeholder={detail.placeholder}
                             readOnly={detail.is_prefilled}
-                            className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00CFE8] ${
+                            className={`w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00CFE8] ${
                               detail.is_prefilled ? 'bg-gray-100 cursor-not-allowed' : ''
                             }`}
                             required
@@ -353,7 +354,7 @@ export default function SurveyFormPage() {
                               })
                             }
                             placeholder={detail.placeholder}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00CFE8]"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00CFE8]"
                             rows={3}
                             required
                           />
@@ -368,7 +369,7 @@ export default function SurveyFormPage() {
                                 [detail.id]: e.target.value
                               })
                             }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00CFE8]"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#00CFE8]"
                             required
                           />
                         )}
