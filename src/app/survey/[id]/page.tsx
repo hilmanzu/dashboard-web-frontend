@@ -64,6 +64,7 @@ export default function SurveyFormPage() {
 
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
   const [surveyData, setSurveyData] = useState<SurveyDetailResponse | null>(null);
   const [customerDetailValues, setCustomerDetailValues] = useState<Record<number, string>>({});
   const [questionListValues, setQuestionListValues] = useState<Record<number, string>>({});
@@ -108,12 +109,12 @@ export default function SurveyFormPage() {
         });
         setCustomerDetailValues(initialCustomerValues);
 
-        // Initialize question list values with no default selection
+        // Initialize question list values with default rating of 5 (Very Satisfied)
         const initialQuestionValues: Record<number, string> = {};
         response.data.survey.survey_question.forEach(question => {
           question.survey_question_detail.forEach(detail => {
             detail.survey_question_list.forEach(list => {
-              initialQuestionValues[list.id] = '';
+              initialQuestionValues[list.id] = '5';
             });
           });
         });
@@ -203,7 +204,7 @@ export default function SurveyFormPage() {
             );
             formData.append(
               `response_question_list[${list.id}][value]`,
-              questionListValues[list.id] || '1'
+              questionListValues[list.id] || '5'
             );
           });
         });
@@ -234,9 +235,11 @@ export default function SurveyFormPage() {
         }
       );
 
+      // Stop the spinner and show an in-app success modal instead of a
+      // blocking native alert(). The native alert froze the main thread
+      // before React could repaint, leaving the button stuck on "Mengirim...".
       setSubmitting(false);
-      alert('Survey berhasil dikirim!');
-      router.push('/survey');
+      setSubmitSuccess(true);
 
     } catch (error) {
       console.error('Error submitting survey:', error);
@@ -273,6 +276,10 @@ export default function SurveyFormPage() {
 
   const totalSteps = 2; // Customer data + Questions + Confirmation
   const ratingLabels = ['Unsatisfied', 'Less Satisfied', 'Quite Satisfied', 'Satisfied', 'Very Satisfied'];
+
+  // Black text + black border so typed values are clearly visible (UAT #1).
+  const fieldClass =
+    'w-full px-3 py-2 border border-black rounded-md text-black placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#00CFE8]';
 
   return (
     <div className="flex min-h-screen bg-gray-50 font-sans">
@@ -338,7 +345,7 @@ export default function SurveyFormPage() {
                             }
                             placeholder={detail.placeholder}
                             readOnly={detail.is_prefilled}
-                            className={`w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00CFE8] ${
+                            className={`${fieldClass} ${
                               detail.is_prefilled ? 'bg-gray-100 cursor-not-allowed' : ''
                             }`}
                             required
@@ -354,7 +361,7 @@ export default function SurveyFormPage() {
                               })
                             }
                             placeholder={detail.placeholder}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00CFE8]"
+                            className={fieldClass}
                             rows={3}
                             required
                           />
@@ -369,7 +376,7 @@ export default function SurveyFormPage() {
                                 [detail.id]: e.target.value
                               })
                             }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#00CFE8]"
+                            className={fieldClass}
                             required
                           />
                         )}
@@ -465,7 +472,7 @@ export default function SurveyFormPage() {
                       type="text"
                       value={accessorName}
                       onChange={(e) => setAccessorName(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00CFE8]"
+                      className={fieldClass}
                       required
                     />
                   </div>
@@ -478,7 +485,7 @@ export default function SurveyFormPage() {
                       type="text"
                       value={accessorDuty}
                       onChange={(e) => setAccessorDuty(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00CFE8]"
+                      className={fieldClass}
                       required
                     />
                   </div>
@@ -490,7 +497,7 @@ export default function SurveyFormPage() {
                     <textarea
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00CFE8]"
+                      className={fieldClass}
                       rows={3}
                     />
                   </div>
@@ -532,7 +539,7 @@ export default function SurveyFormPage() {
                         type="file"
                         accept="image/*"
                         onChange={(e) => setSignatureImage(e.target.files?.[0] || null)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00CFE8]"
+                        className={fieldClass}
                         required
                       />
                       <p className="text-xs text-gray-500 mt-1">Max 10MB</p>
@@ -548,7 +555,7 @@ export default function SurveyFormPage() {
                         type="file"
                         accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                         onChange={(e) => setSignatureDocument(e.target.files?.[0] || null)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00CFE8]"
+                        className={fieldClass}
                         required
                       />
                       <p className="text-xs text-gray-500 mt-1">PDF, DOC, DOCX, JPG, PNG - Max 10MB</p>
@@ -591,6 +598,27 @@ export default function SurveyFormPage() {
           </div>
         </main>
       </div>
+
+      {submitSuccess && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-sm w-full p-6 text-center">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+              <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">Survey berhasil dikirim!</h3>
+            <p className="text-sm text-gray-600 mb-6">Terima kasih, jawaban Anda telah tersimpan.</p>
+            <button
+              type="button"
+              onClick={() => router.push('/survey')}
+              className="w-full px-4 py-2 bg-[#00CFE8] text-white rounded-md hover:bg-[#00b8cf] transition-colors"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
