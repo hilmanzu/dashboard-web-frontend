@@ -73,7 +73,23 @@ export default function SurveyPage() {
       link.remove();
     } catch (error) {
       console.error('Download error:', error);
-      alert('Gagal mengunduh survey. Pastikan backend sudah mendukung fitur ini.');
+      // The backend now supports download; when it still fails it returns a
+      // JSON error (e.g. "Survey response has not been confirmed yet"). Because
+      // the request uses responseType 'blob', that JSON arrives as a Blob, so
+      // read it back and surface the real reason instead of the misleading
+      // "backend belum support" message.
+      const axiosError = error as AxiosError;
+      let message = 'Gagal mengunduh survey. Silakan coba lagi.';
+      const data = axiosError.response?.data;
+      if (data instanceof Blob) {
+        try {
+          const parsed = JSON.parse(await data.text());
+          if (parsed?.message) message = parsed.message;
+        } catch {
+          // Non-JSON blob (unexpected) — keep the generic message.
+        }
+      }
+      alert(message);
     }
   };
 
